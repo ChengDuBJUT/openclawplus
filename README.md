@@ -26,7 +26,7 @@ If you want a personal, single-user assistant that feels local, fast, and always
 
 [Website](https://openclaw.ai) · [Docs](https://docs.openclaw.ai) · [DeepWiki](https://deepwiki.com/openclaw/openclaw) · [Getting Started](https://docs.openclaw.ai/start/getting-started) · [Updating](https://docs.openclaw.ai/install/updating) · [Showcase](https://docs.openclaw.ai/start/showcase) · [FAQ](https://docs.openclaw.ai/start/faq) · [Wizard](https://docs.openclaw.ai/start/wizard) · [Nix](https://github.com/openclaw/nix-openclaw) · [Docker](https://docs.openclaw.ai/install/docker) · [Discord](https://discord.gg/clawd)
 
-Preferred setup: run the onboarding wizard (`openclaw onboard`) in your terminal.
+Preferred setup: run the onboarding wizard (`openclawplus onboard`) in your terminal.
 The wizard guides you step by step through setting up the gateway, workspace, channels, and skills. The CLI wizard is the recommended path and works on **macOS, Linux, and Windows (via WSL2; strongly recommended)**.
 Works with npm, pnpm, or bun.
 New install? Start here: [Getting started](https://docs.openclaw.ai/start/getting-started)
@@ -46,7 +46,7 @@ OpenClaw+ introduces a revolutionary **dual-kernel architecture** with a dedicat
 - **⚡ Lightning-fast responses** using small local models (e.g., Qwen2.5 0.5B) with zero network latency
 - **🧠 Intelligent routing** automatically chooses between cerebellum (fast, local, free) and cerebrum (powerful, cloud) processing
 - **🔄 Seamless fallback** to powerful models only when complex reasoning is actually needed
-- **📊 Real-time statistics** — Track exactly how much you've saved: `openclaw cb stats`
+- **📊 Real-time statistics** — Track exactly how much you've saved: `openclawplus cb stats`
 
 The cerebellum handles greetings, status checks, simple Q&A, and scheduled tasks locally, while complex queries like code generation and multi-step planning are routed to your preferred cloud model.
 
@@ -67,9 +67,9 @@ cb [your question]             # Abbreviation
 Examples:
 
 ```bash
-openclaw agent --message "小脑 what's 2+2?"
-openclaw agent --message "Cerebellum explain quantum physics"
-openclaw agent --message "cb calculate 15% of 230"
+openclawplus agent --message "小脑 what's 2+2?"
+openclawplus agent --message "Cerebellum explain quantum physics"
+openclawplus agent --message "cb calculate 15% of 230"
 ```
 
 **Method 2: Full Cerebellum Mode (Tags)**
@@ -77,13 +77,13 @@ openclaw agent --message "cb calculate 15% of 230"
 Use XML-style tags to process content entirely with cerebellum:
 
 ```bash
-openclaw agent --message "<cb>Your content here</cb>"
+openclawplus agent --message "<cb>Your content here</cb>"
 ```
 
 Example:
 
 ```bash
-openclaw agent --message "<cb>Please summarize this long text for me...</cb>"
+openclawplus agent --message "<cb>Please summarize this long text for me...</cb>"
 ```
 
 **Note:** If you open a `<cb>` tag without closing it, all subsequent content will be processed by cerebellum until the session ends.
@@ -134,10 +134,10 @@ Configure cerebellum in `~/.openclaw/openclaw.json`:
 Runtime: **Node ≥22**.
 
 ```bash
-npm install -g openclawpluslatest
+npm install -g openclawplus@latest
 # or: pnpm add -g openclawplus@latest
 
-openclaw onboard --install-daemon
+openclawplus onboard --install-daemon
 ```
 
 The wizard installs the Gateway daemon (launchd/systemd user service) so it stays running.
@@ -149,18 +149,18 @@ Runtime: **Node ≥22**.
 Full beginner guide (auth, pairing, channels): [Getting started](https://docs.openclaw.ai/start/getting-started)
 
 ```bash
-openclaw onboard --install-daemon
+openclawplus onboard --install-daemon
 
-openclaw gateway --port 18789 --verbose
+openclawplus gateway --port 18789 --verbose
 
 # Send a message
-openclaw message send --to +1234567890 --message "Hello from OpenClaw+"
+openclawplus message send --to +1234567890 --message "Hello from OpenClaw+"
 
 # Talk to the assistant (optionally deliver back to any connected channel: WhatsApp/Telegram/Slack/Discord/Google Chat/Signal/iMessage/BlueBubbles/Microsoft Teams/Matrix/Zalo/Zalo Personal/WebChat)
-openclaw agent --message "Ship checklist" --thinking high
+openclawplus agent --message "Ship checklist" --thinking high
 ```
 
-Upgrading? [Updating guide](https://docs.openclaw.ai/install/updating) (and run `openclaw doctor`).
+Upgrading? [Updating guide](https://docs.openclaw.ai/install/updating) (and run `openclawplus doctor`).
 
 ## Development channels
 
@@ -168,7 +168,7 @@ Upgrading? [Updating guide](https://docs.openclaw.ai/install/updating) (and run 
 - **beta**: prerelease tags (`vYYYY.M.D-beta.N`), npm dist-tag `beta` (macOS app may be missing).
 - **dev**: moving head of `main`, npm dist-tag `dev` (when published).
 
-Switch channels (git + npm): `openclaw update --channel stable|beta|dev`.
+Switch channels (git + npm): `openclawplus update --channel stable|beta|dev`.
 Details: [Development channels](https://docs.openclaw.ai/install/development-channels).
 
 ## From source (development)
@@ -183,13 +183,13 @@ pnpm install
 pnpm ui:build # auto-installs UI deps on first run
 pnpm build
 
-pnpm openclaw onboard --install-daemon
+pnpm openclawplus onboard --install-daemon
 
 # Dev loop (auto-reload on TS changes)
 pnpm gateway:watch
 ```
 
-Note: `pnpm openclaw ...` runs TypeScript directly (via `tsx`). `pnpm build` produces `dist/` for running via Node / the packaged `openclaw` binary.
+Note: `pnpm openclawplus ...` runs TypeScript directly (via `tsx`). `pnpm build` produces `dist/` for running via Node / the packaged `openclawplus` binary.
 
 ## Security defaults (DM access)
 
@@ -200,10 +200,10 @@ Full security guide: [Security](https://docs.openclaw.ai/gateway/security)
 Default behavior on Telegram/WhatsApp/Signal/iMessage/Microsoft Teams/Discord/Google Chat/Slack:
 
 - **DM pairing** (`dmPolicy="pairing"` / `channels.discord.dm.policy="pairing"` / `channels.slack.dm.policy="pairing"`): unknown senders receive a short pairing code and the bot does not process their message.
-- Approve with: `openclaw pairing approve <channel> <code>` (then the sender is added to a local allowlist store).
+- Approve with: `openclawplus pairing approve <channel> <code>` (then the sender is added to a local allowlist store).
 - Public inbound DMs require an explicit opt-in: set `dmPolicy="open"` and include `"*"` in the channel allowlist (`allowFrom` / `channels.discord.dm.allowFrom` / `channels.slack.dm.allowFrom`).
 
-Run `openclaw doctor` to surface risky/misconfigured DM policies.
+Run `openclawplus doctor` to surface risky/misconfigured DM policies.
 
 ## Highlights
 
@@ -381,7 +381,7 @@ Note: signed builds required for macOS permissions to stick across rebuilds (see
 
 - Pairs as a node via the Bridge.
 - Voice trigger forwarding + Canvas surface.
-- Controlled via `openclaw nodes …`.
+- Controlled via `openclawplus nodes …`.
 
 Runbook: [iOS connect](https://docs.openclaw.ai/platforms/ios).
 
@@ -421,7 +421,7 @@ Details: [Security guide](https://docs.openclaw.ai/gateway/security) · [Docker 
 
 ### [WhatsApp](https://docs.openclaw.ai/channels/whatsapp)
 
-- Link the device: `pnpm openclaw channels login` (stores creds in `~/.openclaw/credentials`).
+- Link the device: `pnpm openclawplus channels login` (stores creds in `~/.openclaw/credentials`).
 - Allowlist who can talk to the assistant via `channels.whatsapp.allowFrom`.
 - If `channels.whatsapp.groups` is set, it becomes a group allowlist; include `"*"` to allow all.
 
