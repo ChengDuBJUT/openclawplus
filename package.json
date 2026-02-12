@@ -1,12 +1,38 @@
 {
-  "name": "openclaw-plus",
+  "name": "openclawplus",
   "version": "2026.2.12",
-  "description": "Enhanced multi-channel AI gateway with cerebellum functionality, based on OpenClaw code",
-  "keywords": [],
+  "description": "OpenClawPlus - Enhanced personal AI assistant with cerebellum dual-kernel architecture. Save 60-90% on API costs with intelligent local/cloud AI routing.",
+  "keywords": [
+    "ai",
+    "anthropic",
+    "assistant",
+    "cerebellum",
+    "cost-saving",
+    "discord",
+    "local-ai",
+    "multi-channel",
+    "ollama",
+    "openai",
+    "openclaw",
+    "openclawplus",
+    "slack",
+    "telegram",
+    "whatsapp"
+  ],
+  "homepage": "https://github.com/ChengDuBJUT/openclawplus#readme",
+  "bugs": {
+    "url": "https://github.com/ChengDuBJUT/openclawplus/issues"
+  },
   "license": "MIT",
-  "author": "",
+  "author": "ChengDuBJUT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChengDuBJUT/openclawplus.git"
+  },
   "bin": {
-    "openclaw+": "openclaw.mjs"
+    "ocp": "openclaw.mjs",
+    "openclaw+": "openclaw.mjs",
+    "openclawplus": "openclaw.mjs"
   },
   "files": [
     "assets/",
