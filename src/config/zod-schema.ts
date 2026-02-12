@@ -366,6 +366,33 @@ export const OpenClawSchema = z
       })
       .strict()
       .optional(),
+    cerebellum: z
+      .object({
+        enabled: z.boolean().optional(),
+        provider: z.string().optional(),
+        model: z.string().optional(),
+        baseUrl: z.string().optional(),
+        apiKey: z.string().optional(),
+        thresholds: z
+          .object({
+            maxEstimatedTime: z.number().optional(),
+            maxComplexity: z.number().optional(),
+            minConfidence: z.number().optional(),
+          })
+          .strict()
+          .optional(),
+        forceCerebellumFor: z.array(z.string()).optional(),
+        forceCerebrumFor: z.array(z.string()).optional(),
+        stats: z
+          .object({
+            enabled: z.boolean().optional(),
+            logPath: z.string().optional(),
+          })
+          .strict()
+          .optional(),
+      })
+      .strict()
+      .optional(),
     gateway: z
       .object({
         port: z.number().int().positive().optional(),
