@@ -134,7 +134,7 @@ Configure cerebellum in `~/.openclaw/openclaw.json`:
 Runtime: **Node ≥22**.
 
 ```bash
-npm install -g openclawpluslatest
+npm install -g openclawplus@latest
 # or: pnpm add -g openclawplus@latest
 
 openclaw onboard --install-daemon
