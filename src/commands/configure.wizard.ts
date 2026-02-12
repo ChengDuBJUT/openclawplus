@@ -318,6 +318,11 @@ export async function runConfigureWizard(
         nextConfig = await promptAuthConfig(nextConfig, runtime, prompter);
       }
 
+      if (selected.includes("cerebellum")) {
+        const { promptCerebellumConfig } = await import("./configure.cerebellum.js");
+        nextConfig = await promptCerebellumConfig(nextConfig, runtime);
+      }
+
       if (selected.includes("web")) {
         nextConfig = await promptWebToolsConfig(nextConfig, runtime);
       }
@@ -436,6 +441,12 @@ export async function runConfigureWizard(
 
         if (choice === "model") {
           nextConfig = await promptAuthConfig(nextConfig, runtime, prompter);
+          await persistConfig();
+        }
+
+        if (choice === "cerebellum") {
+          const { promptCerebellumConfig } = await import("./configure.cerebellum.js");
+          nextConfig = await promptCerebellumConfig(nextConfig, runtime);
           await persistConfig();
         }
 

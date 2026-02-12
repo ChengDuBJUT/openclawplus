@@ -1,0 +1,55 @@
+{
+  "name": "openclawplus-example",
+  "version": "1.0.0",
+  "description": "OpenClawPlus 示例配置 - 双内核架构",
+  "cerebellum": {
+    "enabled": true,
+    "provider": "ollama",
+    "model": "qwen2.5:0.5b",
+    "baseUrl": "http://127.0.0.1:11434",
+    "thresholds": {
+      "maxEstimatedTime": 1200,
+      "maxComplexity": 4,
+      "minConfidence": 0.7
+    },
+    "forceCerebellumFor": [
+      "greeting",
+      "status_check",
+      "simple_qa",
+      "scheduled_task",
+      "text_summary",
+      "format_conversion"
+    ],
+    "forceCerebrumFor": [
+      "code_generation",
+      "complex_analysis",
+      "multi_step_planning",
+      "creative_writing",
+      "debugging",
+      "research"
+    ],
+    "stats": {
+      "enabled": true,
+      "logPath": "~/.openclaw/cerebellum-stats.json"
+    }
+  },
+  "agent": {
+    "model": "anthropic/claude-3-5-sonnet-20241022"
+  },
+  "models": {
+    "providers": {
+      "ollama": {
+        "baseUrl": "http://127.0.0.1:11434/v1",
+        "apiKey": "ollama",
+        "models": [
+          {
+            "id": "qwen2.5:0.5b",
+            "name": "Qwen 2.5 0.5B",
+            "contextWindow": 128000,
+            "maxTokens": 8192
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,12 +1,12 @@
 {
-  "name": "openclaw",
-  "version": "2026.2.10",
-  "description": "Multi-channel AI gateway with extensible messaging integrations",
+  "name": "openclaw-plus",
+  "version": "2026.2.12",
+  "description": "Enhanced multi-channel AI gateway with cerebellum functionality, based on OpenClaw code",
   "keywords": [],
   "license": "MIT",
   "author": "",
   "bin": {
-    "openclaw": "openclaw.mjs"
+    "openclaw+": "openclaw.mjs"
   },
   "files": [
     "assets/",

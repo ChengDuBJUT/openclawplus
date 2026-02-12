@@ -72,6 +72,8 @@ export {
   waitForever,
 };
 
+export * as cerebellum from "./cerebellum/index.js";
+
 const isMain = isMainModule({
   currentFile: fileURLToPath(import.meta.url),
 });

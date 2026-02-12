@@ -6,6 +6,7 @@ export * from "./types.approvals.js";
 export * from "./types.auth.js";
 export * from "./types.base.js";
 export * from "./types.browser.js";
+export * from "./types.cerebellum.js";
 export * from "./types.channels.js";
 export * from "./types.openclaw.js";
 export * from "./types.cron.js";
