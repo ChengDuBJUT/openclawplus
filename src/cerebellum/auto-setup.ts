@@ -24,9 +24,35 @@ export interface SetupResult {
  * Check if Ollama is installed
  */
 export function isOllamaInstalled(): boolean {
+  const platform = process.platform;
+
   try {
-    execSync("which ollama", { stdio: "ignore" });
-    return true;
+    if (platform === "win32") {
+      // Check if ollama.exe is in PATH or common locations
+      try {
+        execSync("where ollama", { stdio: "ignore" });
+        return true;
+      } catch {
+        // Also check common install locations
+        const possiblePaths = [
+          "C:\\Program Files\\Ollama\\ollama.exe",
+          "C:\\Program Files (x86)\\Ollama\\ollama.exe",
+        ];
+        for (const p of possiblePaths) {
+          try {
+            execSync(`dir "${p}" >nul 2>&1`, { stdio: "ignore", shell: "cmd.exe" });
+            return true;
+          } catch {
+            continue;
+          }
+        }
+        return false;
+      }
+    } else {
+      // Linux/macOS
+      execSync("which ollama", { stdio: "ignore" });
+      return true;
+    }
   } catch {
     return false;
   }
@@ -137,12 +163,52 @@ export async function installOllama(): Promise<SetupResult> {
         steps.push("Ollama installation completed");
       }
     } else if (platform === "win32") {
-      return {
-        success: false,
-        message:
-          "Windows auto-installation not supported. Please install Ollama manually from https://ollama.com/download",
-        steps,
-      };
+      steps.push("Detected Windows platform");
+
+      // Try winget first (Windows Package Manager)
+      try {
+        steps.push("Trying to install Ollama via winget...");
+        execSync(
+          "winget install Ollama.Ollama --accept-source-agreements --accept-package-agreements",
+          {
+            stdio: "inherit",
+            timeout: 300000,
+          },
+        );
+        steps.push("Ollama installation completed via winget");
+      } catch {
+        // Fall back to downloading the installer
+        try {
+          steps.push("Winget failed, downloading Ollama installer...");
+
+          // Download the Windows installer
+          const installerPath = "C:\\Users\\Public\\Downloads\\ollama-setup.exe";
+          execSync(
+            `curl -fsSL -o "${installerPath}" https://ollama.com/download/ollama-windows-amd64.exe`,
+            {
+              stdio: "inherit",
+              timeout: 120000,
+            },
+          );
+
+          // Run installer silently
+          steps.push("Running Ollama installer...");
+          execSync(`"${installerPath}" /S`, {
+            stdio: "inherit",
+            timeout: 120000,
+          });
+
+          // Clean up installer
+          execSync(`del "${installerPath}"`, { stdio: "ignore" });
+          steps.push("Ollama installation completed");
+        } catch (downloadError) {
+          return {
+            success: false,
+            message: `Failed to install Ollama on Windows: ${downloadError}. Please install manually from https://ollama.com/download`,
+            steps,
+          };
+        }
+      }
     } else {
       return {
         success: false,
@@ -170,16 +236,46 @@ export async function installOllama(): Promise<SetupResult> {
  */
 export async function startOllamaService(): Promise<SetupResult> {
   const steps: string[] = [];
+  const platform = process.platform;
 
   try {
     steps.push("Starting Ollama service...");
 
-    // Start Ollama in background
-    const child = spawn("ollama", ["serve"], {
-      detached: true,
-      stdio: "ignore",
-    });
-    child.unref();
+    if (platform === "win32") {
+      // On Windows, Ollama should be running as a background process after installation
+      // Try to start it via PowerShell or check if it's already running
+      try {
+        // Check if already running
+        execSync('tasklist /FI "IMAGENAME eq ollama.exe" 2>NUL | find "ollama.exe"', {
+          stdio: "ignore",
+          shell: "cmd.exe",
+        });
+        steps.push("Ollama is already running on Windows");
+        return {
+          success: true,
+          message: "Ollama is already running on Windows",
+          steps,
+        };
+      } catch {
+        // Try to start Ollama
+        try {
+          steps.push("Starting Ollama via PowerShell...");
+          execSync('Start-Process -FilePath "ollama" -ArgumentList "serve" -WindowStyle Hidden', {
+            stdio: "ignore",
+            shell: "powershell.exe",
+          });
+        } catch {
+          steps.push("Ollama may need to be started manually on Windows");
+        }
+      }
+    } else {
+      // Linux/macOS: Start Ollama in background
+      const child = spawn("ollama", ["serve"], {
+        detached: true,
+        stdio: "ignore",
+      });
+      child.unref();
+    }
 
     // Wait for service to be ready
     steps.push("Waiting for Ollama service to start...");
